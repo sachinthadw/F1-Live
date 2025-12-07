@@ -140,27 +140,27 @@ export const Championships: React.FC = () => {
             <div className="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-f1-red/5 to-transparent pointer-events-none"></div>
 
             {/* Header Section */}
-            <div className="relative z-10 pt-12 pb-8 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end border-b border-white/5 bg-[#0f0f12]/90 backdrop-blur-xl">
-                <div>
+            <div className="relative z-10 pt-12 pb-6 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end border-b border-white/5 bg-[#0f0f12]/90 backdrop-blur-xl">
+                <div className="flex-1">
                     <div className="flex items-center gap-3 mb-4">
                         <span className="w-2 h-2 bg-f1-red rounded-full animate-pulse shadow-[0_0_10px_#E10600]"></span>
                         <span className="text-xs font-mono text-gray-400 uppercase tracking-[0.4em] font-bold">OFFICIAL STANDINGS</span>
                     </div>
                     
                     {/* Stacked Layout with Visible Overflow to guarantee no cropping */}
-                    <div className="flex flex-col overflow-visible">
-                        <h1 className="text-5xl md:text-7xl font-black text-white font-sans tracking-tighter uppercase leading-none drop-shadow-2xl">
+                    {/* Removed bg-clip-text to ensure descenders are visible */}
+                    <div className="flex flex-col overflow-visible pb-10">
+                        <h1 className="text-5xl md:text-7xl font-black text-white font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-2xl">
                             WORLD
                         </h1>
-                        {/* INCREASED PADDING BOTTOM TO 8 AND LEADING TO NORMAL */}
-                        <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-f1-cyan to-white font-sans tracking-tighter uppercase leading-normal pb-8 drop-shadow-lg">
+                        <h1 className="text-5xl md:text-7xl font-black text-white font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-lg" style={{ color: '#27F4D2' }}>
                             CHAMPIONSHIP
                         </h1>
                     </div>
                 </div>
 
                 {/* View Switcher */}
-                <div className="flex bg-black/40 p-1.5 rounded-lg border border-white/10 mt-6 md:mt-0 backdrop-blur-md shadow-xl">
+                <div className="flex bg-black/40 p-1.5 rounded-lg border border-white/10 mt-6 md:mt-0 backdrop-blur-md shadow-xl mb-8">
                     {['drivers', 'constructors'].map((v) => (
                         <button 
                             key={v}
@@ -174,7 +174,7 @@ export const Championships: React.FC = () => {
             </div>
 
             {/* Content Container */}
-            <div className="relative z-10 flex-1 flex flex-col max-w-7xl mx-auto w-full pt-8">
+            <div className="relative z-10 flex-1 flex flex-col max-w-7xl mx-auto w-full pt-8 pb-20">
                 
                 {/* Podium Stage */}
                 {podium.length > 0 && (
@@ -186,7 +186,7 @@ export const Championships: React.FC = () => {
                 )}
 
                 {/* Rankings List */}
-                <div className={`px-4 md:px-0 pb-12 transition-all duration-700 delay-200 ${isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+                <div className={`px-4 md:px-0 transition-all duration-700 delay-200 ${isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
                     <div className="flex items-center gap-4 mb-6 px-4">
                         <div className="text-xs font-mono text-f1-cyan uppercase tracking-widest font-bold">FULL CLASSIFICATION</div>
                         <div className="h-px bg-white/10 flex-1"></div>

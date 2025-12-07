@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "homepage": "https://sachinthadw.github.io/F1-Live/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
