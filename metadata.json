@@ -1,0 +1,5 @@
+{
+  "name": "VelocityX - F1 Live Intelligence",
+  "description": "A futuristic, high-performance F1 race dashboard featuring live telemetry, driver standings, and track visualization using real-time data from OpenF1.",
+  "requestFramePermissions": []
+}
