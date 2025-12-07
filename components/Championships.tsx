@@ -18,7 +18,7 @@ const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ en
             {/* Rank Number Floating above */}
             <div className="mb-4 flex flex-col items-center transform transition-transform duration-500 hover:scale-110">
                 <div 
-                    className="text-4xl md:text-7xl font-bold font-sans italic leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                    className="text-4xl md:text-7xl font-bold font-sans leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                     style={{ color: borderColor, textShadow: `0 0 20px ${borderColor}` }}
                 >
                     {rank}
@@ -41,7 +41,7 @@ const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ en
                 {/* Content */}
                 <div className="absolute inset-0 p-4 flex flex-col justify-end">
                     
-                    <div className="mb-auto mt-4 text-center opacity-10 font-bold text-5xl md:text-8xl select-none font-sans italic text-white/50">
+                    <div className="mb-auto mt-4 text-center opacity-10 font-bold text-5xl md:text-8xl select-none font-sans text-white/50">
                         {entry.acronym}
                     </div>
 
@@ -49,7 +49,7 @@ const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ en
                         <div className="text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-widest mb-1 text-center truncate">
                             {entry.team_name}
                         </div>
-                        <h3 className="text-lg md:text-2xl font-black text-white font-sans uppercase italic leading-none text-center mb-4 break-words drop-shadow-md">
+                        <h3 className="text-lg md:text-2xl font-black text-white font-sans uppercase leading-none text-center mb-4 break-words drop-shadow-md">
                             {entry.entity_name.split(' ').map((n, i) => (
                                 <span key={i} className="block">{n}</span>
                             ))}
@@ -74,7 +74,7 @@ const ListItem: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ entry,
     return (
         <div className="group relative flex items-center gap-4 p-4 mb-2 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 transition-all duration-300">
             {/* Rank */}
-            <div className="w-8 md:w-12 text-center font-mono font-bold text-lg text-gray-500 italic group-hover:text-white transition-colors">
+            <div className="w-8 md:w-12 text-center font-mono font-bold text-lg text-gray-500 group-hover:text-white transition-colors">
                 {String(rank).padStart(2, '0')}
             </div>
 
@@ -148,7 +148,6 @@ export const Championships: React.FC = () => {
                     </div>
                     
                     {/* Stacked Layout with Visible Overflow to guarantee no cropping */}
-                    {/* Removed bg-clip-text to ensure descenders are visible */}
                     <div className="flex flex-col overflow-visible pb-10">
                         <h1 className="text-5xl md:text-7xl font-black text-white font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-2xl">
                             WORLD
