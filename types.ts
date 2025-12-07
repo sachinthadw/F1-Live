@@ -192,3 +192,12 @@ export interface CircuitInfo {
     aero_zones: number; // Renamed from drs_zones for 2026
     lap_record: string;
 }
+
+export interface RaceResult {
+    position: number;
+    driver_number: number;
+    driver_name: string;
+    team_name: string;
+    team_colour: string;
+    acronym: string;
+}

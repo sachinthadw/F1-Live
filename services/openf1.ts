@@ -1,6 +1,4 @@
-
-
-import { Session, Driver, Position, Lap, Location, CarData, RaceControlMessage, Interval, Stint, RaceEvent, PitStop, WeatherData } from '../types';
+import { Session, Driver, Position, Lap, Location, CarData, RaceControlMessage, Interval, Stint, RaceEvent, PitStop, WeatherData, RaceResult } from '../types';
 
 const API_BASE = 'https://api.openf1.org/v1';
 
@@ -38,6 +36,7 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, r
     try {
       const response = await fetch(url.toString(), {
           headers: { 'Accept': 'application/json' },
+          mode: 'cors' // Ensure CORS is handled
       });
 
       if (!response.ok) {
@@ -352,5 +351,42 @@ export async function getLatestLap(sessionKey: number, driverNumber?: number): P
         return 0;
     } catch {
         return 0;
+    }
+}
+
+export async function getRaceResults(sessionKey: number): Promise<RaceResult[]> {
+    try {
+        // Get Drivers
+        const drivers = await getDrivers(sessionKey, 0); // 0 meeting key fallback
+        const driverMap = new Map(drivers.map(d => [d.driver_number, d]));
+
+        // Get Final Positions
+        // We fetch all positions and map by latest date
+        const positions = await getPositions(sessionKey);
+        
+        // Sort by position
+        const sorted = positions.sort((a, b) => a.position - b.position);
+
+        const results: RaceResult[] = [];
+        for (const p of sorted) {
+            // Only top 3 needed
+            if (p.position > 3) break;
+            
+            const d = driverMap.get(p.driver_number);
+            if (d) {
+                results.push({
+                    position: p.position,
+                    driver_number: d.driver_number,
+                    driver_name: d.full_name,
+                    team_name: d.team_name,
+                    team_colour: d.team_colour,
+                    acronym: d.name_acronym
+                });
+            }
+        }
+        return results;
+    } catch (e) {
+        console.error("Error fetching race results", e);
+        return [];
     }
 }
