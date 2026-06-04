@@ -311,20 +311,20 @@ const App: React.FC = () => {
       <NotificationToast latestMessage={latestNotification} />
 
       {/* Header - Apple Glassmorphism style */}
-      <header className="h-16 flex items-center justify-between px-6 bg-transparent backdrop-blur-3xl border-b border-[var(--border-subtle)] z-20 shrink-0 relative" role="banner">
-        <div className="flex items-center gap-8 relative z-10">
+      <header className="min-h-16 h-auto md:h-16 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:py-0 md:px-6 bg-transparent backdrop-blur-3xl border-b border-[var(--border-subtle)] z-20 shrink-0 gap-4 relative" role="banner">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 relative z-10 w-full md:w-auto">
           <div className="font-bold text-xl tracking-tight text-[var(--heading-color)] flex items-center gap-2">
             Velocity
             <span className="text-[10px] bg-[var(--card-bg-subtle)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-full text-[var(--text-app)] font-mono tracking-widest ml-1 shadow-sm">2.0</span>
           </div>
           
-          <nav className="flex apple-segmented-control border border-[var(--border-subtle)]" role="tablist" aria-label="Main navigation">
+          <nav className="flex apple-segmented-control border border-[var(--border-subtle)] w-full sm:w-auto justify-around sm:justify-start" role="tablist" aria-label="Main navigation">
               <button 
                 onClick={() => setActiveTab('dashboard')} 
                 role="tab"
                 aria-selected={activeTab === 'dashboard'}
                 aria-controls="tab-dashboard"
-                className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'dashboard' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'dashboard' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
               >
                   <Activity size={14} /> Dash
               </button>
@@ -333,7 +333,7 @@ const App: React.FC = () => {
                 role="tab"
                 aria-selected={activeTab === 'championship'}
                 aria-controls="tab-championship"
-                className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'championship' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'championship' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
               >
                   <Trophy size={14} /> WDC
               </button>
@@ -342,14 +342,14 @@ const App: React.FC = () => {
                 role="tab"
                 aria-selected={activeTab === 'schedule'}
                 aria-controls="tab-schedule"
-                className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'schedule' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-1.5 text-xs font-medium transition-all cursor-pointer ${activeTab === 'schedule' ? 'apple-tab-active text-[var(--heading-color)]' : 'text-gray-400 hover:text-[var(--heading-color)]'}`}
               >
                   <Calendar size={14} /> Calendar
               </button>
           </nav>
         </div>
 
-        <div className="flex items-center gap-6 relative z-10">
+        <div className="flex items-center justify-between md:justify-end gap-6 relative z-10 w-full md:w-auto border-t md:border-t-0 border-[var(--border-subtle)] pt-3 md:pt-0">
             {/* Theme Toggle Button */}
             <button 
                 onClick={() => setIsLightMode(!isLightMode)} 
@@ -372,8 +372,8 @@ const App: React.FC = () => {
                 <WeatherWidget weather={weather} />
             </div>
 
-            <div className="text-right hidden sm:block border-l border-[var(--border-subtle)] pl-6">
-                <div className="font-medium text-[var(--heading-color)] text-sm tracking-wide font-mono">{currentTimeUTC}</div>
+            <div className="text-right border-l border-[var(--border-subtle)] pl-6">
+                <div className="font-medium text-[var(--heading-color)] text-xs md:text-sm tracking-wide font-mono">{currentTimeUTC}</div>
             </div>
         </div>
       </header>

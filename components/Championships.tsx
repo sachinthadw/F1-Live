@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ entry, rank }) => {
     const teamColor = `#${entry.team_colour}`;
-    // Taller, more majestic pillars
-    const pillarHeight = rank === 1 ? 'h-[320px] md:h-[450px]' : rank === 2 ? 'h-[260px] md:h-[360px]' : 'h-[220px] md:h-[300px]';
+    // Mobile scaling
+    const pillarHeight = rank === 1 ? 'h-[160px] sm:h-[320px] md:h-[450px]' : rank === 2 ? 'h-[130px] sm:h-[260px] md:h-[360px]' : 'h-[110px] sm:h-[220px] md:h-[300px]';
     const zIndex = rank === 1 ? 'z-20' : 'z-10';
     const orderClass = rank === 1 ? 'order-2' : rank === 2 ? 'order-1' : 'order-3';
     
@@ -16,21 +16,21 @@ const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ en
     const borderColor = rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32';
 
     return (
-        <div className={`relative flex flex-col justify-end ${orderClass} ${zIndex} w-1/3 max-w-[300px] -mx-2 md:mx-4`}>
+        <div className={`relative flex flex-col justify-end ${orderClass} ${zIndex} w-1/3 max-w-[300px] -mx-1 sm:-mx-2 md:mx-4`}>
             {/* Rank Number Floating above */}
-            <div className="mb-4 flex flex-col items-center transform transition-transform duration-500 hover:scale-110">
+            <div className="mb-2 sm:mb-4 flex flex-col items-center transform transition-transform duration-500 hover:scale-110">
                 <div 
-                    className="text-4xl md:text-7xl font-bold font-sans leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                    className="text-2xl sm:text-4xl md:text-7xl font-bold font-sans leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                     style={{ color: borderColor, textShadow: `0 0 20px ${borderColor}` }}
                 >
                     {rank}
                 </div>
-                <div className="h-1 w-8 md:w-16 mt-2 rounded-full" style={{ backgroundColor: borderColor }}></div>
+                <div className="h-0.5 sm:h-1 w-4 sm:w-8 md:w-16 mt-1 sm:mt-2 rounded-full" style={{ backgroundColor: borderColor }}></div>
             </div>
 
             {/* The Pillar */}
             <div 
-                className={`${pillarHeight} w-full relative group overflow-hidden rounded-t-2xl border-t-2 border-x border-[var(--border-subtle)] transition-all duration-500 hover:shadow-[0_-20px_80px_-20px_rgba(10,132,255,0.08)]`}
+                className={`${pillarHeight} w-full relative group overflow-hidden rounded-t-xl sm:rounded-t-2xl border-t-2 border-x border-[var(--border-subtle)] transition-all duration-500 hover:shadow-[0_-20px_80px_-20px_rgba(10,132,255,0.08)]`}
                 style={{ 
                     background: `linear-gradient(to bottom, ${teamColor}22, var(--glass-bg) 95%)`,
                     borderTopColor: teamColor,
@@ -41,27 +41,25 @@ const DriverPillar: React.FC<{ entry: ChampionshipEntry, rank: number }> = ({ en
                 <div className="absolute inset-0 opacity-20 bg-[linear-gradient(45deg,rgba(255,255,255,0.05)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.05)_50%,rgba(255,255,255,0.05)_75%,transparent_75%,transparent)] bg-[length:4px_4px]"></div>
                 
                 {/* Content */}
-                <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                <div className="absolute inset-0 p-2 sm:p-4 flex flex-col justify-end">
                     
-                    <div className="mb-auto mt-4 text-center opacity-10 font-bold text-5xl md:text-8xl select-none font-sans text-[var(--heading-color)]">
+                    <div className="mb-auto mt-2 sm:mt-4 text-center opacity-10 font-bold text-2xl sm:text-5xl md:text-8xl select-none font-sans text-[var(--heading-color)]">
                         {entry.acronym}
                     </div>
 
                     <div className="relative z-10">
-                        <div className="text-[10px] md:text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-1 text-center truncate">
+                        <div className="text-[8px] sm:text-[10px] md:text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-0.5 sm:mb-1 text-center truncate">
                             {entry.team_name}
                         </div>
-                        <h3 className="text-lg md:text-2xl font-black text-[var(--heading-color)] font-sans uppercase leading-none text-center mb-4 break-words drop-shadow-sm">
-                            {entry.entity_name.split(' ').map((n, i) => (
-                                <span key={i} className="block">{n}</span>
-                            ))}
+                        <h3 className="text-[10px] sm:text-lg md:text-2xl font-black text-[var(--heading-color)] font-sans uppercase leading-none text-center mb-1 sm:mb-4 break-words drop-shadow-sm truncate">
+                            {entry.entity_name}
                         </h3>
                         
-                        <div className="w-full h-px bg-[var(--border-subtle)] mb-2"></div>
+                        <div className="w-full h-px bg-[var(--border-subtle)] mb-1 sm:mb-2 hidden sm:block"></div>
                         
-                        <div className="flex justify-center items-baseline gap-1">
-                            <span className="text-2xl md:text-4xl font-bold text-[var(--heading-color)] font-mono tracking-tighter">{entry.points}</span>
-                            <span className="text-[10px] text-[var(--color-f1-red)] font-bold uppercase">PTS</span>
+                        <div className="flex justify-center items-baseline gap-0.5 sm:gap-1">
+                            <span className="text-sm sm:text-2xl md:text-4xl font-bold text-[var(--heading-color)] font-mono tracking-tighter">{entry.points}</span>
+                            <span className="text-[8px] sm:text-[10px] text-[var(--color-f1-red)] font-bold uppercase">PTS</span>
                         </div>
                     </div>
                 </div>
@@ -142,7 +140,7 @@ export const Championships: React.FC = () => {
             <div className="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-[var(--color-f1-red)]/10 to-transparent pointer-events-none"></div>
 
             {/* Header Section */}
-            <div className="relative z-10 pt-12 pb-6 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end border-b border-[var(--border-subtle)] bg-[var(--glass-bg)] backdrop-blur-3xl rounded-t-2xl">
+            <div className="relative z-10 pt-12 pb-6 px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-[var(--border-subtle)] bg-[var(--glass-bg)] backdrop-blur-3xl rounded-t-2xl gap-4 md:gap-0">
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-4">
                         <Trophy className="w-5 h-5 text-[var(--color-f1-red)]" />
@@ -150,23 +148,23 @@ export const Championships: React.FC = () => {
                     </div>
                     
                     {/* Stacked Layout with Visible Overflow to guarantee no cropping */}
-                    <div className="flex flex-col overflow-visible pb-10">
-                        <h1 className="text-5xl md:text-7xl font-black text-[var(--heading-color)] font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-sm">
+                    <div className="flex flex-col overflow-visible pb-0 md:pb-10">
+                        <h1 className="text-4xl md:text-7xl font-black text-[var(--heading-color)] font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-sm">
                             WORLD
                         </h1>
-                        <h1 className="text-5xl md:text-7xl font-black text-[var(--color-f1-cyan)] font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-sm">
+                        <h1 className="text-4xl md:text-7xl font-black text-[var(--color-f1-cyan)] font-sans tracking-tighter uppercase leading-[1.1] drop-shadow-sm">
                             CHAMPIONSHIP
                         </h1>
                     </div>
                 </div>
 
                 {/* View Switcher */}
-                <div className="flex bg-[var(--nav-bg)] p-1 rounded-lg border border-[var(--border-subtle)] mt-6 md:mt-0 backdrop-blur-md shadow-xl mb-8">
+                <div className="flex bg-[var(--nav-bg)] p-1 rounded-lg border border-[var(--border-subtle)] mt-2 md:mt-0 backdrop-blur-md shadow-xl mb-4 md:mb-8 w-full md:w-auto justify-around">
                     {['drivers', 'constructors'].map((v) => (
                         <button 
                             key={v}
                             onClick={() => handleSwitch(v as any)}
-                            className={`flex items-center gap-2 px-6 py-2.5 rounded-md text-xs font-bold uppercase tracking-widest transition-all duration-300 ${view === v ? 'bg-[var(--color-f1-red)] text-white shadow-[0_4px_12px_rgba(255,59,48,0.2)]' : 'text-[var(--text-muted)] hover:text-[var(--heading-color)] hover:bg-[var(--panel-hover)]'}`}
+                            className={`flex-1 md:flex-initial flex items-center justify-center gap-2 px-6 py-2.5 rounded-md text-xs font-bold uppercase tracking-widest transition-all duration-300 ${view === v ? 'bg-[var(--color-f1-red)] text-white shadow-[0_4px_12px_rgba(255,59,48,0.2)]' : 'text-[var(--text-muted)] hover:text-[var(--heading-color)] hover:bg-[var(--panel-hover)]'}`}
                         >
                             {v === 'drivers' ? <Users className="w-4 h-4" /> : <Trophy className="w-4 h-4" />}
                             {v}

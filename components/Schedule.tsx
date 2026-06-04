@@ -83,7 +83,7 @@ export const Schedule: React.FC = () => {
                     <div className="flex bg-[var(--card-bg-subtle)] backdrop-blur-xl border border-[var(--border-subtle)] rounded-xl p-3 items-center gap-6 shadow-md">
                         <div className="flex flex-col">
                             <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-mono flex items-center gap-1.5 mb-1"><Timer className="w-3 h-3 text-[var(--color-f1-red)] animate-pulse" /> NEXT SESSION</span>
-                            <span className="text-sm text-[var(--text-app)] font-medium tracking-tight truncate max-w-[150px]">{nextEvent.circuit_short_name} - {nextSession?.session_name}</span>
+                            <span className="text-sm text-[var(--text-app)] font-medium tracking-tight truncate max-w-[150px] sm:max-w-[300px] md:max-w-none">{nextEvent.circuit_short_name} - {nextSession?.session_name}</span>
                         </div>
                         <div className="border-l border-[var(--border-subtle)] h-8"></div>
                         <div className="flex gap-4">

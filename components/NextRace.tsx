@@ -159,9 +159,9 @@ export const NextRace: React.FC<NextRaceProps> = ({ nextSession, lastSession }) 
                         <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-[var(--heading-color)] mb-2 leading-tight">
                             {title}
                         </h1>
-                        <div className="text-xs text-[var(--text-muted)] font-medium uppercase mb-6 inline-flex items-center gap-1.5 bg-[var(--card-bg-subtle)] px-2.5 py-1 rounded border border-[var(--border-subtle)]">
+                        <div className="text-[10px] sm:text-xs text-[var(--text-muted)] font-medium uppercase mb-6 inline-flex flex-wrap items-center gap-1.5 bg-[var(--card-bg-subtle)] px-2.5 py-1 rounded border border-[var(--border-subtle)] max-w-full">
                             <Map className="w-3.5 h-3.5 text-[var(--color-f1-cyan)]" />
-                            {nextSession.circuit_short_name}
+                            <span className="truncate max-w-[200px] sm:max-w-none">{nextSession.circuit_short_name}</span>
                         </div>
 
                         {/* General Countdown Timer */}
