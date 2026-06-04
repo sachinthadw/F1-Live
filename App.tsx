@@ -312,10 +312,10 @@ const App: React.FC = () => {
       <NotificationToast latestMessage={latestNotification} />
 
       {/* Header - Apple Glassmorphism style */}
-      <header className="min-h-16 h-auto md:h-16 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:py-0 md:px-6 bg-transparent backdrop-blur-3xl border-b border-[var(--border-subtle)] z-20 shrink-0 gap-4 relative" role="banner">
+      <header className="min-h-16 h-auto md:h-20 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:py-0 md:px-6 bg-transparent backdrop-blur-3xl border-b border-[var(--border-subtle)] z-20 shrink-0 gap-4 relative" role="banner">
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 relative z-10 w-full md:w-auto">
-          <div className="flex items-center h-8 md:h-10">
-            <img src={logoUrl} alt="Velocity Logo" className="h-7 md:h-9 w-auto object-contain select-none transition-all" />
+          <div className="flex items-center h-12 md:h-16">
+            <img src={logoUrl} alt="Velocity Logo" className="h-10 md:h-14 w-auto object-contain select-none transition-all" />
           </div>
           
           <nav className="flex apple-segmented-control border border-[var(--border-subtle)] w-full sm:w-auto justify-around sm:justify-start" role="tablist" aria-label="Main navigation">
