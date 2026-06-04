@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, lazy, Suspense } from 'react';
+import logoUrl from './logo-1 (1).png';
 import { getRelevantSession, getDrivers, getLiveLocations, getRaceControlMessages, getPositions, getIntervals, getWeather, getLastCompletedSession, getStints } from './services/openf1';
 import { getForecastWeather } from './services/weather';
 import { Session, DriverStanding, Driver, Location, DriverMapData, RaceControlMessage, Position, Interval, TrackStatus, WeatherData, Stint } from './types';
@@ -313,9 +314,8 @@ const App: React.FC = () => {
       {/* Header - Apple Glassmorphism style */}
       <header className="min-h-16 h-auto md:h-16 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:py-0 md:px-6 bg-transparent backdrop-blur-3xl border-b border-[var(--border-subtle)] z-20 shrink-0 gap-4 relative" role="banner">
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 relative z-10 w-full md:w-auto">
-          <div className="font-bold text-xl tracking-tight text-[var(--heading-color)] flex items-center gap-2">
-            Velocity
-            <span className="text-[10px] bg-[var(--card-bg-subtle)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-full text-[var(--text-app)] font-mono tracking-widest ml-1 shadow-sm">2.0</span>
+          <div className="flex items-center h-8 md:h-10">
+            <img src={logoUrl} alt="Velocity Logo" className="h-7 md:h-9 w-auto object-contain select-none transition-all" />
           </div>
           
           <nav className="flex apple-segmented-control border border-[var(--border-subtle)] w-full sm:w-auto justify-around sm:justify-start" role="tablist" aria-label="Main navigation">
