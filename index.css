@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-mono: SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  --color-f1-red: #FF3B30;       /* iOS Red */
+  --color-f1-dark: #000000;      /* True black background */
+  --color-f1-gray: rgba(30, 30, 30, 0.5); /* Apple Frosted Glass */
+  --color-f1-light: #F2F2F7;     /* iOS Light Gray */
+  --color-f1-cyan: #0A84FF;      /* iOS Blue */
+  --color-f1-cyanDark: #007AFF;  /* iOS Blue Dark */
+  --color-f1-yellow: #FFCC00;    /* iOS Yellow */
+  --color-panel: rgba(28, 28, 30, 0.4); 
+
+  --animate-scanline: scanline 4s linear infinite;
+
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+}
+
+:root {
+  --bg-app: radial-gradient(circle at 50% -20%, #1c1c1e 0%, #000000 70%);
+  --text-app: #F2F2F7;
+  --glass-bg: rgba(28, 28, 30, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.35);
+  --panel-hover: rgba(255, 255, 255, 0.04);
+  --text-muted: #9ca3af;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --heading-color: #ffffff;
+  --nav-bg: rgba(118, 118, 128, 0.24);
+  --nav-active: rgba(255, 255, 255, 0.15);
+  --card-bg-subtle: rgba(255, 255, 255, 0.05);
+}
+
+:root.light {
+  --bg-app: radial-gradient(circle at 50% -20%, #F4F6F9 0%, #E3E8F0 90%);
+  --text-app: #1C1C1E;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.05);
+  --panel-hover: rgba(0, 0, 0, 0.03);
+  --text-muted: #5A5D64;
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --heading-color: #000000;
+  --nav-bg: rgba(0, 0, 0, 0.06);
+  --nav-active: rgba(255, 255, 255, 1);
+  --card-bg-subtle: rgba(0, 0, 0, 0.03);
+}
+
+body {
+  background: var(--bg-app);
+  background-attachment: fixed;
+  color: var(--text-app);
+  overflow: hidden;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-grid-subtle {
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+:root.light .bg-grid-subtle {
+  background-image: 
+    radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+:root.light .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 40px var(--glass-shadow);
+  border-radius: 20px;
+}
+
+.apple-segmented-control {
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.apple-tab-active {
+  background: var(--nav-active);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+@keyframes progressOrigin {
+  0% { width: 0%; }
+  50% { width: 80%; }
+  100% { width: 100%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
