@@ -40,8 +40,10 @@ export const TelemetryCharts: React.FC<TelemetryChartsProps> = ({ sessionKey, dr
               setData(telemetry);
             }
         }
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        if (err.message !== "OPENF1_UNAUTHORIZED") {
+            console.error("[Telemetry] Failed to fetch data:", err);
+        }
       } finally {
         setLoading(false);
       }

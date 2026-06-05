@@ -63,13 +63,19 @@ export const normalizeTeamName = (name: string): string => {
     return name;
 };
 
+let OPENF1_AUTH_BLOCKED = false;
+
 /**
  * Fetch from OpenF1 API with exponential backoff retry.
  * In production, routes through a CORS proxy. If the active proxy fails
  * on all retries, it switches to the next proxy for subsequent calls.
- * Returns an empty array on failure instead of throwing.
+ * Returns an empty array on failure instead of throwing, UNLESS it's a 401.
  */
 async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, retries = 3): Promise<T[]> {
+  if (OPENF1_AUTH_BLOCKED) {
+      throw new Error("OPENF1_UNAUTHORIZED");
+  }
+
   const fetchUrl = getApiUrl(endpoint, params);
 
   for (let attempt = 0; attempt < retries; attempt++) {
@@ -85,6 +91,11 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, r
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+          if (response.status === 401) {
+              console.error(`[OpenF1] 401 Unauthorized on ${endpoint}. API is restricted.`);
+              OPENF1_AUTH_BLOCKED = true;
+              throw new Error("OPENF1_UNAUTHORIZED");
+          }
           if (response.status === 429) {
               // Rate limited — back off aggressively
               const backoff = Math.min(2000 * Math.pow(2, attempt), 15000);
@@ -111,6 +122,9 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, r
           return [];
       }
     } catch (error: any) {
+      if (error.message === "OPENF1_UNAUTHORIZED") {
+          throw error;
+      }
       if (error.name === 'AbortError') {
           console.warn(`[OpenF1] Timeout on ${endpoint} (attempt ${attempt + 1}/${retries})`);
       } else {
@@ -330,6 +344,11 @@ export async function getRelevantSession(): Promise<Session | null> {
   }
 
   if (liveSession) {
+      // If the OpenF1 API is actively blocking us with 401 Unauthorized, we cannot get telemetry
+      // so we should not enter the LIVE state.
+      if (OPENF1_AUTH_BLOCKED) {
+          return { ...liveSession, is_live: false };
+      }
       return { ...liveSession, is_live: true };
   }
 
@@ -398,10 +417,10 @@ export async function getTrackMapFromPreviousYear(circuitKey: number): Promise<L
 }
 
 export async function getDrivers(sessionKey: number, meetingKey: number): Promise<Driver[]> {
-  let drivers = await fetchAPI<Driver>('/drivers', { session_key: sessionKey });
+  let drivers = await fetchAPI<Driver>('/drivers', { session_key: sessionKey }).catch(() => []);
   
   if (drivers.length < 10 && meetingKey) {
-      const meetingDrivers = await fetchAPI<Driver>('/drivers', { meeting_key: meetingKey });
+      const meetingDrivers = await fetchAPI<Driver>('/drivers', { meeting_key: meetingKey }).catch(() => []);
       const unique = new Map<number, Driver>();
       meetingDrivers.forEach(d => unique.set(d.driver_number, d));
       drivers = Array.from(unique.values());
