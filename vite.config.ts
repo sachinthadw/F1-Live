@@ -21,5 +21,12 @@ export default defineConfig({
   },
   server: {
     open: true,
+    proxy: {
+      '/openf1-api': {
+        target: 'https://api.openf1.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/openf1-api/, ''),
+      },
+    },
   },
 });

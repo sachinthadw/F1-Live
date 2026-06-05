@@ -1,6 +1,45 @@
 import { Session, Driver, Position, Lap, Location, CarData, RaceControlMessage, Interval, Stint, RaceEvent, PitStop, WeatherData, RaceResult } from '../types';
 
-const API_BASE = 'https://api.openf1.org/v1';
+const OPENF1_ORIGIN = 'https://api.openf1.org/v1';
+
+/**
+ * Build the effective API base URL.
+ * In production (GitHub Pages), the OpenF1 API blocks CORS, so we route
+ * through a lightweight CORS proxy.  In development the Vite dev-server
+ * proxy handles it, so we hit the API path directly.
+ *
+ * Proxy chain (production only):
+ *   browser → corsproxy.io → api.openf1.org
+ */
+const IS_PRODUCTION = typeof window !== 'undefined' &&
+  !window.location.hostname.includes('localhost') &&
+  !window.location.hostname.includes('127.0.0.1');
+
+// List of CORS proxy services to try — if one is down we fall through to the next
+const CORS_PROXIES = [
+  (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+];
+
+let activeProxyIndex = 0; // start with the first proxy
+
+function getApiUrl(endpoint: string, params: Record<string, any> = {}): string {
+  const url = new URL(`${OPENF1_ORIGIN}${endpoint}`);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      url.searchParams.append(key, String(value));
+    }
+  });
+  const rawUrl = url.toString();
+
+  if (!IS_PRODUCTION) {
+    // In dev, use Vite proxy: /openf1-api/v1/...
+    return rawUrl.replace(OPENF1_ORIGIN, '/openf1-api/v1');
+  }
+
+  // In production, wrap with CORS proxy
+  return CORS_PROXIES[activeProxyIndex](rawUrl);
+}
 
 // Cache for track maps to prevent repeated fetches
 const TRACK_MAP_CACHE = new Map<number, Location[]>();
@@ -26,24 +65,20 @@ export const normalizeTeamName = (name: string): string => {
 
 /**
  * Fetch from OpenF1 API with exponential backoff retry.
+ * In production, routes through a CORS proxy. If the active proxy fails
+ * on all retries, it switches to the next proxy for subsequent calls.
  * Returns an empty array on failure instead of throwing.
  */
 async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, retries = 3): Promise<T[]> {
-  const url = new URL(`${API_BASE}${endpoint}`);
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      url.searchParams.append(key, String(value));
-    }
-  });
+  const fetchUrl = getApiUrl(endpoint, params);
 
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout per request
+      const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout (proxy adds latency)
 
-      const response = await fetch(url.toString(), {
+      const response = await fetch(fetchUrl, {
           headers: { 'Accept': 'application/json' },
-          mode: 'cors',
           signal: controller.signal,
       });
 
@@ -57,7 +92,14 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, r
               await new Promise(resolve => setTimeout(resolve, backoff));
               continue;
           }
-          if (attempt === retries - 1) return []; 
+          if (attempt === retries - 1) {
+              // Try switching proxy for next calls
+              if (IS_PRODUCTION && activeProxyIndex < CORS_PROXIES.length - 1) {
+                  activeProxyIndex++;
+                  console.warn(`[OpenF1] Switching to backup CORS proxy (#${activeProxyIndex})`);
+              }
+              return [];
+          }
           continue; 
       }
       
@@ -74,7 +116,14 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, any> = {}, r
       } else {
           console.warn(`[OpenF1] Fetch error on ${endpoint} (attempt ${attempt + 1}/${retries}):`, error.message);
       }
-      if (attempt === retries - 1) return [];
+      if (attempt === retries - 1) {
+          // Try switching proxy for next calls
+          if (IS_PRODUCTION && activeProxyIndex < CORS_PROXIES.length - 1) {
+              activeProxyIndex++;
+              console.warn(`[OpenF1] Switching to backup CORS proxy (#${activeProxyIndex})`);
+          }
+          return [];
+      }
       // Exponential backoff: 1.5s, 3s, 6s
       const backoff = 1500 * Math.pow(2, attempt);
       await new Promise(resolve => setTimeout(resolve, backoff));

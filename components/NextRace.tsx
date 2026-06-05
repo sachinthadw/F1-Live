@@ -186,7 +186,54 @@ export const NextRace: React.FC<NextRaceProps> = ({ nextSession, lastSession }) 
                       </div>
                 </motion.div>
 
-                {/* 2. CIRCUIT SPECIFICATIONS */}
+                {/* 2. TRACK MAP PREVIEW */}
+                {trackPath.length > 0 && (() => {
+                    const xs = trackPath.map(p => p.x);
+                    const ys = trackPath.map(p => p.y);
+                    const minX = Math.min(...xs);
+                    const maxX = Math.max(...xs);
+                    const minY = Math.min(...ys);
+                    const maxY = Math.max(...ys);
+                    const padding = 2000;
+                    const width = maxX - minX + padding * 2;
+                    const height = maxY - minY + padding * 2;
+                    const pathData = trackPath.map(p => `${p.x - minX + padding},${(maxY - p.y) + padding}`).join(' ');
+
+                    return (
+                        <motion.div
+                          initial={{ y: 15, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.12 }}
+                          className="glass-panel p-4 flex-1 min-h-[180px] flex flex-col relative overflow-hidden"
+                        >
+                            <div className="flex items-center gap-2 mb-2">
+                                <Map className="w-3.5 h-3.5 text-[var(--color-f1-cyan)]" />
+                                <span className="text-[10px] font-bold tracking-widest text-[var(--heading-color)] uppercase">CIRCUIT LAYOUT</span>
+                            </div>
+                            <svg viewBox={`0 0 ${width} ${height}`} className="w-full flex-1 object-contain" style={{ maxHeight: '200px' }}>
+                                <path
+                                    d={`M ${pathData}`}
+                                    fill="none"
+                                    stroke="rgba(0,255,204,0.06)"
+                                    strokeWidth="500"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                                <path
+                                    d={`M ${pathData}`}
+                                    fill="none"
+                                    stroke="var(--color-f1-cyan)"
+                                    strokeWidth="120"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    opacity="0.7"
+                                />
+                            </svg>
+                        </motion.div>
+                    );
+                })()}
+
+                {/* 3. CIRCUIT SPECIFICATIONS */}
                 <motion.div 
                   initial={{ y: 15, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}

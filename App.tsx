@@ -165,6 +165,66 @@ const App: React.FC = () => {
     };
   }, []);
 
+  // Periodic session re-check: auto-detect when a session goes live
+  useEffect(() => {
+    if (loading) return; // Don't start until initial load is done
+
+    const recheckSession = async () => {
+      try {
+        const freshSession = await Promise.race([
+          getRelevantSession(),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000))
+        ]);
+
+        if (!freshSession || !freshSession.session_key) return;
+
+        // If we found a LIVE session and we're currently not live, switch!
+        if (freshSession.is_live && connectionStatus !== 'LIVE') {
+          console.log('[VelocityX] Live session detected! Auto-switching to live view.');
+          setSession(freshSession);
+          setConnectionStatus('LIVE');
+          setActiveTab('dashboard');
+
+          // Re-fetch drivers for the live session
+          const driversList = await getDrivers(freshSession.session_key, freshSession.meeting_key);
+          if (driversList && driversList.length > 0) {
+            driversRef.current = driversList;
+            const newStandings = driversList.map((d, i) => ({
+              ...d,
+              position: i + 1,
+              grid_position: i + 1,
+              pos_change: 0,
+              gap: '-',
+              interval: '-',
+              aero_status: 'Z-MODE' as const,
+              mom_status: 'READY' as const
+            }));
+            setStandings(newStandings);
+            if (driversList.length > 0) setSelectedDriver(driversList[0].driver_number);
+          }
+        }
+
+        // If we were live but session ended, switch to offline
+        if (!freshSession.is_live && connectionStatus === 'LIVE' && session?.session_key !== freshSession.session_key) {
+          console.log('[VelocityX] Session ended. Switching to offline mode.');
+          setSession(freshSession);
+          setConnectionStatus('OFFLINE');
+        }
+
+        // Update the "next session" data even if offline (e.g. different practice session)
+        if (!freshSession.is_live && connectionStatus !== 'LIVE' && freshSession.session_key !== session?.session_key) {
+          setSession(freshSession);
+        }
+      } catch (e) {
+        console.warn('[VelocityX] Session re-check failed:', e);
+      }
+    };
+
+    // Check every 60 seconds
+    const interval = setInterval(recheckSession, 60000);
+    return () => clearInterval(interval);
+  }, [loading, connectionStatus, session]);
+
   const mapLocationsToDriverMapData = useCallback((locations: Location[]): DriverMapData[] => {
     return locations.map(loc => {
       const d = driversRef.current?.find(driver => driver.driver_number === loc.driver_number);
